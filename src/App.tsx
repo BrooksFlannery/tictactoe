@@ -19,7 +19,7 @@ function App() {
     <div className='board'>
       {gameState.board.map((row, rowIndex) => {
         return ( 
-          <div className='row'> 
+          <div key = {rowIndex} className='row'> 
             {row.map((cell, cellIndex) => {
               return (
               <div onClick={()=>handleClick(cellIndex, rowIndex)} className = "cell" key={cellIndex}> 
