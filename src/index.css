@@ -1,4 +1,7 @@
-
+:root{
+  justify-items: center;  
+  text-align: center;
+}
 .cell{
   background-color:white;
   height:100px;
@@ -15,5 +18,22 @@
 
 .board{
   background-color: white;
-  ;
+  justify-content: center;
+}
+
+.score-board{
+    display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.score{
+  width: 80px;
+  height: 80px;
+  align-content: center;
+  font-size: 40px;
+}
+.end-state{
+  height: 40px;
+  font-size: 40px;
 }

@@ -8,41 +8,105 @@ export type gameState = {
     playerTurn: player,
     endstate?: endstate
 }
+export type matchState = {
+    game:gameState,
+    xScore : number,
+    oScore : number
+}
 export type moveCoords = {
     rowIndex : number,
     colIndex: number
+}
+
+export function InitMatchState(): matchState{
+    return{
+        game: InitGameState(),
+        xScore :0,
+        oScore :0
+    }
 }
 export function InitGameState(): gameState{
     return {
         board: [[null, null, null],[null, null, null],[null, null, null]],
         playerTurn: "x",
+        endstate:null
     }
 }
 
-export function move(prevState:gameState, moveCoords: moveCoords) : gameState{
-    const newState = structuredClone(prevState);
-    if(newState.board[moveCoords.rowIndex][moveCoords.colIndex]) return newState;
-    newState.board[moveCoords.rowIndex][moveCoords.colIndex] = newState.playerTurn;
-    newState.playerTurn = switchPlayer(newState.playerTurn)
+export function move(prevState:matchState, moveCoords: moveCoords) : matchState{
+    if(prevState.game.endstate !== null) return prevState;
 
-    checkEndState(newState);
+    const newState = structuredClone(prevState);
+    if(newState.game.board[moveCoords.rowIndex][moveCoords.colIndex]) return newState;
+    newState.game.board[moveCoords.rowIndex][moveCoords.colIndex] = newState.game.playerTurn;
+    newState.game.playerTurn = switchPlayer(newState.game.playerTurn)
+
+    newState.game.endstate = checkEndState(newState.game);
+    if(newState.game.endstate === 'o') newState.oScore++;
+    if(newState.game.endstate === 'x') newState.xScore++;
+
+
 
     return newState;
 }
 
-function checkEndState(newState:gameState){
-    //loop through rows check for win
+function checkEndState(newState:gameState):endstate{
+    let isTie:boolean = true
 
-    for (let index = 0; index < newState.board[0].length; index++) {
-        if(newState.board[0][index] === null) return;
-        
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if(newState.board[i][j] === null) isTie = false;
+        }
+
+        if(newState.board[i][0] === "o" 
+            && newState.board[i][1] === "o" 
+            && newState.board[i][2] === "o"){
+            return "o";
+        }else if(newState.board[i][0] === "x" 
+            && newState.board[i][1] === "x" 
+            && newState.board[i][2] === "x"){
+            return "x";
+        }
+        else if(newState.board[0][i] === "o" 
+            && newState.board[1][i] === "o" 
+            && newState.board[2][i] === "o"){
+            return "o";
+        }else if(newState.board[0][i] === "x" 
+            && newState.board[1][i] === "x" 
+            && newState.board[2][i] === "x"){
+            return "x";
+        }
     }
 
-    //loop through coloumns check for wins
-    //check each diagonal for wins
-    //if we get to the end with no winners and no 
+    if(newState.board[0][0] === "o" 
+        && newState.board[1][1] === "o" 
+        && newState.board[2][2] === "o"){
+            return "o";
+    }else if(newState.board[0][0] === "x" 
+        && newState.board[1][1] === "x" 
+        && newState.board[2][2] === "x"){
+            return "x";
+        }
+     if(newState.board[0][2] === "o" 
+        && newState.board[1][1] === "o" 
+        && newState.board[2][0] === "o"){
+            return "o";
+    }else if(newState.board[0][2] === "x" 
+        && newState.board[1][1] === "x" 
+        && newState.board[2][0] === "x"){
+            return "x";
+        }
+
+        
+    if(isTie) return "tie";
+
+
+
+    return null;
 }
 
-export function switchPlayer(curPlayer:player):player{
+
+
+function switchPlayer(curPlayer:player):player{
     return curPlayer === "x" ? "o" : "x";  
 }
