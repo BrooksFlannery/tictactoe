@@ -46,7 +46,7 @@ function App() {
   function resetGameState(){
    setTimeout(()=> {
       setMessage('')
-      setMatchState({...matchState, game: InitGameState()})
+      setMatchState({...matchState, game: InitGameState(), matchId : matchState.matchId})
     },2000)
 }
 
