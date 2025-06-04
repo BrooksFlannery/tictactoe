@@ -1,0 +1,56 @@
+{
+  "id": "33fb418d-2909-4b61-80bd-62cab19a7fee",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.tic_tac_toe_matches": {
+      "name": "tic_tac_toe_matches",
+      "schema": "",
+      "columns": {
+        "matchId": {
+          "name": "matchId",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "game": {
+          "name": "game",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "xScore": {
+          "name": "xScore",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "oScore": {
+          "name": "oScore",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
