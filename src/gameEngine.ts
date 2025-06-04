@@ -3,29 +3,31 @@ export type Cell = Player | null;
 export type Row = Cell[]
 export type Board = Row[]
 export type EndState = Player | "tie" | null;
-export type gameState = {
+export type GameState = {
     Board: Board,
     playerTurn: Player,
     EndState?: EndState
 }
 export type MatchState = {
-    game:gameState,
+    game : GameState,
     xScore : number,
     oScore : number
+    matchId: string
 }
 export type MoveCoords = {
     rowIndex : number,
-    colIndex: number
+    colIndex: number,
 }
 
 export function InitMatchState(): MatchState{
     return{
         game: InitGameState(),
         xScore :0,
-        oScore :0
+        oScore :0,
+        matchId : crypto.randomUUID()
     }
 }
-export function InitGameState(): gameState{
+export function InitGameState(): GameState{
     return {
         Board: [[null, null, null],[null, null, null],[null, null, null]],
         playerTurn: "x",
@@ -48,7 +50,7 @@ export function move(prevState:MatchState, moveCoords: MoveCoords) : MatchState{
     return newState;
 }
 
-function checkEndState(newState:gameState):EndState{
+function checkEndState(newState:GameState):EndState{
     let isTie:boolean = true
 
     for (let i = 0; i < 3; i++) {
