@@ -1,10 +1,11 @@
+import 'dotenv/config'; 
 import express from "express";
 import ViteExpress from "vite-express";
-import { MemoryMatchAPI } from "./src/api.ts";
+import { DbMatchApi } from './src/db/db.ts'
 
 const app = express();
 app.use(express.json());
-const api = new MemoryMatchAPI();
+const api = new DbMatchApi();
 
 // get match
 app.get('/api/match/:matchId', async (req, res) => {
