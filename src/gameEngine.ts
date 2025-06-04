@@ -1,24 +1,24 @@
-export type player = "x" | "o";
-export type cell = player | null;
-export type row = cell[]
-export type board = row[]
-export type endstate = player | "tie" | null;
+export type Player = "x" | "o";
+export type Cell = Player | null;
+export type Row = Cell[]
+export type Board = Row[]
+export type EndState = Player | "tie" | null;
 export type gameState = {
-    board: board,
-    playerTurn: player,
-    endstate?: endstate
+    Board: Board,
+    playerTurn: Player,
+    EndState?: EndState
 }
-export type matchState = {
+export type MatchState = {
     game:gameState,
     xScore : number,
     oScore : number
 }
-export type moveCoords = {
+export type MoveCoords = {
     rowIndex : number,
     colIndex: number
 }
 
-export function InitMatchState(): matchState{
+export function InitMatchState(): MatchState{
     return{
         game: InitGameState(),
         xScore :0,
@@ -27,86 +27,83 @@ export function InitMatchState(): matchState{
 }
 export function InitGameState(): gameState{
     return {
-        board: [[null, null, null],[null, null, null],[null, null, null]],
+        Board: [[null, null, null],[null, null, null],[null, null, null]],
         playerTurn: "x",
-        endstate:null
+        EndState:null
     }
 }
 
-export function move(prevState:matchState, moveCoords: moveCoords) : matchState{
-    if(prevState.game.endstate !== null) return prevState;
+export function move(prevState:MatchState, moveCoords: MoveCoords) : MatchState{
+    if(prevState.game.EndState !== null) return prevState;
 
     const newState = structuredClone(prevState);
-    if(newState.game.board[moveCoords.rowIndex][moveCoords.colIndex]) return newState;
-    newState.game.board[moveCoords.rowIndex][moveCoords.colIndex] = newState.game.playerTurn;
+    if(newState.game.Board[moveCoords.rowIndex][moveCoords.colIndex]) return newState;
+    newState.game.Board[moveCoords.rowIndex][moveCoords.colIndex] = newState.game.playerTurn;
     newState.game.playerTurn = switchPlayer(newState.game.playerTurn)
 
-    newState.game.endstate = checkEndState(newState.game);
-    if(newState.game.endstate === 'o') newState.oScore++;
-    if(newState.game.endstate === 'x') newState.xScore++;
-
-
+    newState.game.EndState = checkEndState(newState.game);
+    if(newState.game.EndState === 'o') newState.oScore++;
+    if(newState.game.EndState === 'x') newState.xScore++;
 
     return newState;
 }
 
-function checkEndState(newState:gameState):endstate{
+function checkEndState(newState:gameState):EndState{
     let isTie:boolean = true
 
     for (let i = 0; i < 3; i++) {
+        
+        //CHECK IF THERE ARE EMPTY SQUARE(IF SO IT ISNT A TIE)
         for (let j = 0; j < 3; j++) {
-            if(newState.board[i][j] === null) isTie = false;
+            if(newState.Board[i][j] === null) isTie = false;
         }
 
-        if(newState.board[i][0] === "o" 
-            && newState.board[i][1] === "o" 
-            && newState.board[i][2] === "o"){
+        //CHECK ROWS AND COLOUMNS FOR WINS
+        if(newState.Board[i][0] === "o" 
+            && newState.Board[i][1] === "o" 
+            && newState.Board[i][2] === "o"){
             return "o";
-        }else if(newState.board[i][0] === "x" 
-            && newState.board[i][1] === "x" 
-            && newState.board[i][2] === "x"){
+        }else if(newState.Board[i][0] === "x" 
+            && newState.Board[i][1] === "x" 
+            && newState.Board[i][2] === "x"){
             return "x";
         }
-        else if(newState.board[0][i] === "o" 
-            && newState.board[1][i] === "o" 
-            && newState.board[2][i] === "o"){
+        else if(newState.Board[0][i] === "o" 
+            && newState.Board[1][i] === "o" 
+            && newState.Board[2][i] === "o"){
             return "o";
-        }else if(newState.board[0][i] === "x" 
-            && newState.board[1][i] === "x" 
-            && newState.board[2][i] === "x"){
+        }else if(newState.Board[0][i] === "x" 
+            && newState.Board[1][i] === "x" 
+            && newState.Board[2][i] === "x"){
             return "x";
         }
     }
 
-    if(newState.board[0][0] === "o" 
-        && newState.board[1][1] === "o" 
-        && newState.board[2][2] === "o"){
+    //CHECK DIAGONALS FOR WIN
+    if(newState.Board[0][0] === "o" 
+        && newState.Board[1][1] === "o" 
+        && newState.Board[2][2] === "o"){
             return "o";
-    }else if(newState.board[0][0] === "x" 
-        && newState.board[1][1] === "x" 
-        && newState.board[2][2] === "x"){
+    }else if(newState.Board[0][0] === "x" 
+        && newState.Board[1][1] === "x" 
+        && newState.Board[2][2] === "x"){
             return "x";
         }
-     if(newState.board[0][2] === "o" 
-        && newState.board[1][1] === "o" 
-        && newState.board[2][0] === "o"){
+     if(newState.Board[0][2] === "o" 
+        && newState.Board[1][1] === "o" 
+        && newState.Board[2][0] === "o"){
             return "o";
-    }else if(newState.board[0][2] === "x" 
-        && newState.board[1][1] === "x" 
-        && newState.board[2][0] === "x"){
+    }else if(newState.Board[0][2] === "x" 
+        && newState.Board[1][1] === "x" 
+        && newState.Board[2][0] === "x"){
             return "x";
         }
 
         
     if(isTie) return "tie";
-
-
-
     return null;
 }
 
-
-
-function switchPlayer(curPlayer:player):player{
+function switchPlayer(curPlayer:Player):Player{
     return curPlayer === "x" ? "o" : "x";  
 }
