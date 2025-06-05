@@ -1,25 +1,14 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { MatchState, MoveCoords } from './gameEngine.ts';
 import { ClientMatchAPI } from './api.ts';
-import { useParams } from 'react-router';
+import { useLoaderData } from 'react-router';
 
-function MatchView(){
+export function MatchView(){
   const api = useMemo(() => new ClientMatchAPI(), []);
-  const unsafeMatchId  = useParams().matchId;
-  if(!unsafeMatchId) throw new Error('No matchId')
-  const matchId = unsafeMatchId;
-
-  const [matchState, setMatchState] = useState<MatchState | undefined>(undefined);
+  const {match:initialMatch} = useLoaderData();
+  const [matchState, setMatchState] = useState<MatchState>(initialMatch);
   const [winMessage, setWinMessage] = useState('');
   const [shake, setShake] = useState(false);
-
-  useEffect(() => {
-    async function init() {
-      const match = await api.getMatch(matchId)
-      setMatchState(match);
-    }
-    init();
-    }, [api]);
 
   useEffect(() => {
     if (!matchState || !matchState.game) return;
@@ -130,5 +119,3 @@ function MatchView(){
     </div>
   );
 }
-
-export default MatchView
