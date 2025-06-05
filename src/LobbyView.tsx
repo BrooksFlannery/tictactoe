@@ -10,12 +10,14 @@ export function loadLobby(){
 function MatchDisplay(match:MatchState){
     const navigate = useNavigate();
     const handleClick = () => {
-        console.log('click')
+        const sound = new Audio('../sounds/shake1.mp3');
+        sound.playbackRate = 0.8 + (Math.random() - 0.1);
+        sound.play();
         navigate(`/matchView/${match.matchId}`);
     }
 
     return(
-        <div key={match.matchId}onClick={handleClick}>
+        <div className="lobby-match" key={match.matchId} onClick={handleClick}>
             {match.matchId}
         </div>
     )
@@ -24,7 +26,7 @@ function MatchDisplay(match:MatchState){
 export function LobbyView(){
     const matches: MatchState[] = useLoaderData();
     return(
-        <div>
+        <div className="lobby-match-container">
             {matches.map((match) => MatchDisplay(match))}
         </div>
     )
