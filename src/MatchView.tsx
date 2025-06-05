@@ -1,12 +1,19 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { MatchState, MoveCoords } from './gameEngine.ts';
 import { ClientMatchAPI } from './api.ts';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
+
+export async function loadMatch({params}:LoaderFunctionArgs):Promise<MatchState>{
+  const matchId  = params.matchId as string;
+  const api = new ClientMatchAPI();
+  const match = await api.getMatch(matchId)
+  return match;
+}
 
 export function MatchView(){
   const api = useMemo(() => new ClientMatchAPI(), []);
-  const {match:initialMatch} = useLoaderData();
-  const [matchState, setMatchState] = useState<MatchState>(initialMatch);
+  const match:MatchState = useLoaderData();
+  const [matchState, setMatchState] = useState<MatchState>(match);
   const [winMessage, setWinMessage] = useState('');
   const [shake, setShake] = useState(false);
 
@@ -76,7 +83,7 @@ export function MatchView(){
   function handleClick(cellIndex: number, rowIndex: number) {
     if (!matchState) return;
     setShake(true);
-    const sound = new Audio('../sounds/toyEdit1.mp3');
+    const sound = new Audio('../sounds/shake1.mp3');
     sound.playbackRate = 0.8 + (Math.random() - 0.1);
     sound.play();
     const coords: MoveCoords = {

@@ -2,7 +2,27 @@
   justify-items: center;  
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
-  
+  color: white;
+  background-color: black;
+}
+.lobby-match:hover{
+  cursor: pointer;
+  transform: translateY(-1px);
+  box-shadow: 0px 0px 10px rgb(255, 255, 255);
+}
+.lobby-match{
+  border-radius: 10px;
+  border: solid;
+  padding: 1dvh;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, text-shadow 0.2s ease;
+}
+.lobby-match:not(:hover){
+  text-shadow: none;
+}
+.lobby-match-container{
+  display: flex;
+  flex-direction: column;
+  gap: 3dvh;
 }
 .game-screen{
   justify-items: center;
@@ -10,14 +30,18 @@
 h1{
   font-size: 80px;
 }
+*{
+  text-shadow: 0px 0px 10px rgb(255, 255, 255);
+}
 .cell{
-  background-color:white;
   height:100px;
   width:100px;
   /* margin:20px; */
   font-size: 80px;
-  
+  background-color: black;
 }
+
+
 
 .row{
   display: flex;
@@ -36,7 +60,7 @@ h1{
 }
 
 .board{
-  background-color: black;
+  background-color: white;
   justify-content: center;
 
   transform-origin: center center;
