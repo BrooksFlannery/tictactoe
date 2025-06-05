@@ -48,7 +48,7 @@ export class MemoryMatchAPI implements MatchAPI {
 
 export class ClientMatchAPI implements MatchAPI {
     async makeMove(matchId: string, moveCoords: MoveCoords): Promise<MatchState> {
-        const response = await fetch(`/api/match/${matchId}`, {
+        const response = await fetch(`/api/match/${matchId}/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(moveCoords),
@@ -58,7 +58,7 @@ export class ClientMatchAPI implements MatchAPI {
     }
 
     async createMatch(): Promise<MatchState> {
-        const response = await fetch("/api/match", {
+        const response = await fetch("/api/match/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
         });
@@ -67,7 +67,7 @@ export class ClientMatchAPI implements MatchAPI {
     }
 
     async getMatch(matchId: string): Promise<MatchState> {
-        const response = await fetch(`/api/match/${matchId}`, {
+        const response = await fetch(`/api/match/${matchId}/`, {
             method: "GET",
         });
         const match = await response.json();
@@ -75,7 +75,7 @@ export class ClientMatchAPI implements MatchAPI {
     }
 
     async getMatches(): Promise<MatchState[]> {
-        const response = await fetch('api/matches/', {
+        const response = await fetch('/api/matches/', {
             method : "GET",
         });
         const matches = await response.json();
@@ -83,7 +83,7 @@ export class ClientMatchAPI implements MatchAPI {
     }
 
     async resetGame(matchId: string): Promise<MatchState> {
-        const response = await fetch(`/api/match/${matchId}/reset`, {
+        const response = await fetch(`/api/match/${matchId}/reset/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
         });

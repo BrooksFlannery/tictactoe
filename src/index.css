@@ -40,6 +40,9 @@ h1{
   font-size: 80px;
   background-color: black;
 }
+.cell:hover{
+  cursor:pointer;
+}
 
 
 

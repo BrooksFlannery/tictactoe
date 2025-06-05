@@ -1,14 +1,14 @@
 import 'dotenv/config'; 
 import express from "express";
-import ViteExpress from "vite-express";
 import { DbMatchApi } from './src/db/db.ts'
 
 const app = express();
 app.use(express.json());
 const api = new DbMatchApi();
 
+
 // get match
-app.get('/api/match/:matchId', async (req, res) => {
+app.get('/api/match/:matchId/', async (req, res) => {
     const match = await api.getMatch(req.params.matchId);
     res.json(match);
 });
@@ -32,9 +32,9 @@ app.post('/api/match/:matchId', async (req, res) => {
 });
 
 //reset game (maybe should rename route api/game/.../reset)
-app.post('/api/match/:matchId/reset', async (req, res) => {
+app.post('/api/match/:matchId/reset/', async (req, res) => {
     const match = await api.resetGame(req.params.matchId);
     res.json(match);
 });
 
-ViteExpress.listen(app, 3000, () => console.log("Server is listening on port 3000..."));
+app.listen(3000, () => console.log("Server is listening on port 3000..."));
