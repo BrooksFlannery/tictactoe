@@ -5,6 +5,7 @@ export interface MatchAPI {
     createMatch(): Promise<MatchState>;
     getMatch(matchId: string): Promise<MatchState>;
     resetGame(matchId: string): Promise<MatchState>;
+    getMatches(): Promise<MatchState[]>;
 }
 
 function findMatch(matchId: string, matches: Map<string, MatchState>): MatchState {
@@ -28,10 +29,15 @@ export class MemoryMatchAPI implements MatchAPI {
         this.matches.set(match.matchId, match);
         return match;
     }
-
+    
     async getMatch(matchId: string): Promise<MatchState> {
         return findMatch(matchId, this.matches);
     }
+
+    async getMatches(): Promise<MatchState[]> {
+        const matchesArr = Array.from(this.matches.values())
+        return matchesArr;
+    }//untested i think it should work though???
 
     async resetGame(matchId: string): Promise<MatchState> {
         const matchState = findMatch(matchId, this.matches);
@@ -66,6 +72,14 @@ export class ClientMatchAPI implements MatchAPI {
         });
         const match = await response.json();
         return match;
+    }
+
+    async getMatches(): Promise<MatchState[]> {
+        const response = await fetch('api/matches/', {
+            method : "GET",
+        });
+        const matches = await response.json();
+        return matches
     }
 
     async resetGame(matchId: string): Promise<MatchState> {

@@ -13,6 +13,12 @@ app.get('/api/match/:matchId', async (req, res) => {
     res.json(match);
 });
 
+//get matches
+app.get('/api/matches/', async (req, res) => {
+    const matches = await api.getMatches();
+    res.json(matches);
+})
+
 // create match
 app.post('/api/match/', async (req, res) => {
     const match = await api.createMatch();
