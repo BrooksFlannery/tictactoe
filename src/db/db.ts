@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 if (!process.env.DATABASE_URL) {
     throw new Error('DATABASE_URL environment variable isnt set');
 }
-const db = drizzle(process.env.DATABASE_URL)
+export const db = drizzle(process.env.DATABASE_URL)
 
 export class DbMatchApi implements MatchAPI {
     async resetGame(matchId: string): Promise<MatchState> {
@@ -49,6 +49,15 @@ export class DbMatchApi implements MatchAPI {
 
         if (!match) throw new Error("Game Not Found");
         return match as MatchState;
+    }
+
+    async getMatches(): Promise<MatchState[]>{
+        const matches = await db
+            .select()
+            .from(matchesTable)//maybe later limit to something more specific or quantity
+        
+        if(!matches) throw new Error("No Games Found");
+        return matches as MatchState[];
     }
 
     async makeMove(matchId: string, moveCoords: MoveCoords): Promise<MatchState> {
