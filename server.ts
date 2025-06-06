@@ -35,11 +35,6 @@ app.get('/api/matches/', async (req, res) => {
     res.json(matches);
 })
 
-// create match
-app.post('/api/match/', async (req, res) => {
-    const match = await api.createMatch();
-    res.json(match);
-});
 
 // make move (maybe a better route would be /api/game/.....)
 app.post('/api/match/:matchId', async (req, res) => {
@@ -56,8 +51,16 @@ app.post('/api/match/:matchId/reset/', async (req, res) => {
 });
 
 app.post('/api/match/:matchId/rename/', async (req,res) => {
-    const match = await api.renameMatch(req.params.matchId, req.body)
+    const match = await api.renameMatch(req.params.matchId, req.body.newName);
+    io.to(match.matchId).emit('matchUpdated', match)
+    res.json(match);
 })
+
+// create match
+app.post('/api/match/', async (req, res) => {
+    const match = await api.createMatch();
+    res.json(match);
+});
 
 const PORT = 3000;
 httpServer.listen(3000, () => console.log(`Server is listening on http://localhost:${PORT}`))

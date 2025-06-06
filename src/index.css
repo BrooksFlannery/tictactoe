@@ -1,94 +1,149 @@
-:root{
+:root {
   justify-items: center;  
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
   color: white;
   background-color: black;
 }
-.lobby-match:hover{
-  cursor: pointer;
-  transform: translateY(-1px);
-  box-shadow: 0px 0px 10px rgb(255, 255, 255);
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
 }
-.lobby-match{
+
+* {
+  text-shadow: 0px 0px 6px rgb(255, 255, 255);
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 80px;
+  margin: 0;
+}
+
+.lobby-screen, .game-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5dvh;
+  max-height: 100dvh;
+}
+
+.create-match {
+  all: unset;
+  display: block;
+  color: #5a5a5a;
+  background-color: white;
+  border-radius: 10px;
+  border: solid;
+  padding: 1dvh;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+  margin-bottom: 2dvh;
+}
+.create-match:hover{
+  cursor: pointer;
+  cursor: pointer;
+  color: black;
+  background-color: #aaffd3;
+  transform: translateY(-1px);
+}
+
+.lobby-match-container {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3dvh;
+  overflow-y: scroll;
+  padding-bottom: 10px;
+  padding-top: 10px;
+
+}
+
+.lobby-match {
+  width: 50dvw;
+  max-width: 300px;
   border-radius: 10px;
   border: solid;
   padding: 1dvh;
   transition: transform 0.2s ease, box-shadow 0.2s ease, text-shadow 0.2s ease;
 }
-.lobby-match:not(:hover){
+
+.lobby-match:hover {
+  cursor: pointer;
+  transform: translateY(-1px);
+  box-shadow: 0px 0px 10px rgb(255, 255, 255);
+}
+
+.lobby-match:not(:hover) {
   text-shadow: none;
 }
-.lobby-match-container{
-  display: flex;
-  flex-direction: column;
-  gap: 3dvh;
-}
-.game-screen{
-  justify-items: center;
-}
-h1{
-  font-size: 80px;
-}
-*{
-  text-shadow: 0px 0px 6px rgb(255, 255, 255);
-}
-.cell{
-  height:100px;
-  width:100px;
-  /* margin:20px; */
+
+/* Game UI elements */
+
+.cell {
+  height: 100px;
+  width: 100px;
   font-size: 80px;
   background-color: black;
 }
-.cell:hover{
-  cursor:pointer;
+
+.cell:hover {
+  cursor: pointer;
 }
 
-
-
-.row{
-  display: flex;
-  flex-direction: row;
-  width: min-content;
-}
-.row:nth-child(2){
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.cell:nth-child(3){
-  margin-left: 10px;
-}
-.cell:nth-child(1){
-  margin-right: 10px;
-}
-
-.board{
+.board {
+  margin: 10dvh;
   background-color: white;
   justify-content: center;
-
   transform-origin: center center;
   width: min-content;
 }
 
-.score-board{
+.row {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
+  width: min-content;
 }
 
-.score{
+.row:nth-child(2) {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.cell:nth-child(3) {
+  margin-left: 10px;
+}
+
+.cell:nth-child(1) {
+  margin-right: 10px;
+}
+
+.score-and-board {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+}
+
+.score {
   height: 80px;
   align-content: center;
   font-size: 40px;
 }
-.end-state{
+
+.end-state {
   height: 40px;
   font-size: 40px;
 }
 
-.shake{
-  animation:shake 0.6s
+/* Animations */
+
+.shake {
+  animation: shake 0.6s;
 }
 
 @keyframes shake {
@@ -99,15 +154,15 @@ h1{
   40%  { transform: translate(0px, 3px) rotate(1deg); }
   50%  { transform: translate(0px, -2px) rotate(-0.5deg); }
   60%  { transform: translate(0px, 1px) rotate(0.2deg); }
-  70%  { transform: translate(0px, .5px) rotate(0deg); }
-  80%  { transform: translate(0px, -.25px) rotate(-0.3deg); }
-  90%  { transform: translate(0px, .2px) rotate(0.3deg); }
+  70%  { transform: translate(0px, 0.5px) rotate(0deg); }
+  80%  { transform: translate(0px, -0.25px) rotate(-0.3deg); }
+  90%  { transform: translate(0px, 0.2px) rotate(0.3deg); }
   100% { transform: translate(0px, 0px) rotate(0deg); }
 }
+
 .rattle {
   animation: rattle 0.4s linear;
 }
-
 
 @keyframes rattle {
   0%   { transform: translateX(0); }
@@ -122,6 +177,7 @@ h1{
   90%  { transform: translateX(-0.5px); }
   100% { transform: translateX(0); }
 }
+
 .roll {
   animation: roll 0.4s ease-in-out;
 }
@@ -132,8 +188,7 @@ h1{
   30%  { transform: rotate(-2deg); }
   45%  { transform: rotate(1.5deg); }
   60%  { transform: rotate(-1.5deg); }
-  75%  { transform: rotate(.1deg); }
+  75%  { transform: rotate(0.1deg); }
   90%  { transform: rotate(-0.5deg); }
   100% { transform: rotate(0deg); }
 }
-

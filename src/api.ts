@@ -73,10 +73,11 @@ export class ClientMatchAPI implements MatchAPI {
     }
 
     async renameMatch(matchId: string, newName: string): Promise<MatchState> {
-        const response = await fetch(`/api/match/:${matchId}/rename/` , {
+        console.log("new name: ", newName, " matchId: ", matchId)
+        const response = await fetch(`/api/match/${matchId}/rename/` , {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newName)
+            body: JSON.stringify({newName})
         });
         const match = await response.json();
         return match;

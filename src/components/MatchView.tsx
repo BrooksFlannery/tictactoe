@@ -17,6 +17,8 @@ export function MatchView() {
   const match: MatchState = useLoaderData();
   const [matchState, setMatchState] = useState<MatchState>(match);
   const [winMessage, setWinMessage] = useState('');
+  const [title, setTitle] = useState(match.matchName);
+  const [isEditingName, setIsEditingName] = useState<boolean>(false);
   const [shake, setShake] = useState(false);
 
   useEffect(() => {
@@ -90,36 +92,56 @@ export function MatchView() {
     handleMove(matchState.matchId, coords);
   }
 
-  return (
+const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    api.renameMatch(match.matchId, title)
+    setIsEditingName(false);
+  }
+
+    return (
     <div className='game-screen'>
-      <div
-        className={`board ${
-          shake ? ['shake', 'rattle', 'roll'][Math.floor(Math.random() * 3)] : ''
-        }`}
-      >
-        {matchState.game.Board.map((row, rowIndex) => {
-          return (
-            <div key={rowIndex} className='row'>
-              {row.map((cell, cellIndex) => {
-                return (
-                  <div
-                    onClick={() => handleClick(cellIndex, rowIndex)}
-                    className='cell'
-                    key={cellIndex}
-                  >
-                    {cell}
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
-      <div className='score-board'>
+      {!isEditingName && (
+        <div title='Edit Name'onClick={() => setIsEditingName(true)} className='lobby-match'>
+          {title}
+        </div>
+      )}
+
+      {isEditingName && (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
+          <button type='submit'>Submit</button>
+        </form>
+      )}
+
+      <div className='score-and-board'>
         <div className='score o'>O: {matchState.oScore}</div>
-        <div className='score x'>X: {matchState.xScore}</div>
-      </div>
+        <div
+          className={`board ${
+            shake ? ['shake', 'rattle', 'roll'][Math.floor(Math.random() * 3)] : ''
+          }`}
+        >
+          {matchState.game.Board.map((row, rowIndex) => (
+            <div key={rowIndex} className='row'>
+              {row.map((cell, cellIndex) => (
+                <div
+                  onClick={() => handleClick(cellIndex, rowIndex)}
+                  className='cell'
+                  key={cellIndex}
+                >
+                  {cell}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+          <div className='score x'>X: {matchState.xScore}</div>
+        </div>
       <div className='end-state'>{winMessage}</div>
     </div>
   );
+
 }

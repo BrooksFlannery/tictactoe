@@ -16,8 +16,8 @@ function MatchDisplay(match:MatchState){
     }
 
     return(
-        <div className="lobby-match" key={match.matchId} onClick={handleMatchClick}>
-            {match.matchId}
+        <div title='Join Match'className="lobby-match" key={match.matchId} onClick={handleMatchClick}>
+            {match.matchName}
         </div>
     )
 }
@@ -35,13 +35,13 @@ export function LobbyView(){
     }
 
     return(
-        <>
-            <button onClick={handleCreateClick}>
-                Create Match
-            </button>
+        <div className="lobby-screen">
+                <button title="Create Match" className = 'create-match' onClick={handleCreateClick}>
+                    Create Match
+                </button>
             <div className="lobby-match-container">
                 {matches.map((match) => MatchDisplay(match))}
             </div>
-        </>
+        </div>
     )
 }
