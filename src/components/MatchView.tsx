@@ -1,71 +1,61 @@
 import { useState, useEffect, useMemo } from 'react';
-import type { MatchState, MoveCoords } from './gameEngine.ts';
-import { ClientMatchAPI } from './api.ts';
+import type { MatchState, MoveCoords } from '../gameEngine.ts';
+import { ClientMatchAPI } from '../api.ts';
 import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
-import { socket } from './socket.ts'
+import { socket } from '../utils/socket.ts';
 import { playRandomSound } from '../utils/soundPlayer.ts';
 
-export async function loadMatch({params}:LoaderFunctionArgs):Promise<MatchState>{
-  const matchId  = params.matchId as string;
+export async function loadMatch({ params }: LoaderFunctionArgs): Promise<MatchState> {
+  const matchId = params.matchId as string;
   const api = new ClientMatchAPI();
-  const match = await api.getMatch(matchId)
+  const match = await api.getMatch(matchId);
   return match;
 }
 
-export function MatchView(){
+export function MatchView() {
   const api = useMemo(() => new ClientMatchAPI(), []);
-  const match:MatchState = useLoaderData();
+  const match: MatchState = useLoaderData();
   const [matchState, setMatchState] = useState<MatchState>(match);
   const [winMessage, setWinMessage] = useState('');
   const [shake, setShake] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     socket.on('matchUpdated', (updatedMatch) => {
       console.log('Match updated:', updatedMatch);
-      setMatchState(updatedMatch)
-    })
-  },[])
+      setShake(true);
+      setMatchState(updatedMatch);
+    });
+  }, []);
 
   useEffect(() => {
-    if(!match.matchId) return;
+    if (!match.matchId) return;
     socket.emit('joinMatch', match);
-    console.log('joining match :',match.matchId)
+    console.log('joining match :', match.matchId);
 
     return () => {
-    socket.off('connect');
-    socket.off('matchUpdated');
+      socket.off('connect');
+      socket.off('matchUpdated');
     };
-  },[match.matchId])
+  }, [match.matchId]);
 
   useEffect(() => {
     if (!matchState || !matchState.game) return;
 
-    async function handleWin(endState: "x" | "o" | "tie", currentMatchId: string) {
-        endState === "tie"
-          ? playRandomSound.failure()
-          : playRandomSound.success();
+    const { EndState } = matchState.game;
+    if (EndState === 'x' || EndState === 'o' || EndState === 'tie') {
+      EndState === 'tie'
+        ? playRandomSound.failure()
+        : playRandomSound.success();
 
       setWinMessage(
-        endState === "tie"
-          ? "Tie..."
-          : endState === "x"
+        EndState === 'tie'
+          ? 'Tie...'
+          : EndState === 'x'
           ? "X's Win!!!"
           : "O's Win!!!"
       );
-
-      const matchIdToReset = currentMatchId;
-      setTimeout(async () => {
-        const resetMatch = await api.resetGame(matchIdToReset);
-        setMatchState(resetMatch);
-        setWinMessage('');
-      }, 2000);
     }
-
-    const { EndState } = matchState.game;
-    if (EndState === "x" || EndState === "o" || EndState === "tie") {
-      handleWin(EndState as "x" | "o" | "tie", matchState.matchId);
-    }
-  }, [matchState, api]);
+  }, [matchState]);
 
   useEffect(() => {
     if (shake) {
@@ -83,10 +73,18 @@ export function MatchView(){
     setMatchState(match);
   }
 
-  function handleClick(cellIndex: number, rowIndex: number) {
+  async function handleClick(cellIndex: number, rowIndex: number) {
     if (!matchState) return;
-    setShake(true);
     playRandomSound.interaction();
+
+    const { EndState } = matchState.game;
+    if (EndState === 'x' || EndState === 'o' || EndState === 'tie') {
+      const resetMatch = await api.resetGame(matchState.matchId);
+      setMatchState(resetMatch);
+      setWinMessage('');
+      return;
+    }
+
     const coords: MoveCoords = {
       rowIndex,
       colIndex: cellIndex,

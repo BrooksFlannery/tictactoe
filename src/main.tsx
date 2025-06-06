@@ -2,9 +2,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { loadMatch, MatchView } from './MatchView.tsx'
+import { loadMatch, MatchView } from './components/MatchView.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router'
-import {loadLobby, LobbyView} from './LobbyView.tsx'
+import {loadLobby, LobbyView} from './components/LobbyView.tsx'
 
 
 let router = createBrowserRouter([

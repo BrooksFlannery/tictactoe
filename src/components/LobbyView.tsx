@@ -1,6 +1,6 @@
-import { ClientMatchAPI } from "./api"
+import { ClientMatchAPI } from "../api.ts"
 import { useLoaderData, useNavigate } from "react-router";
-import type { MatchState } from "./gameEngine";
+import type { MatchState } from "../gameEngine.ts";
 import { playRandomSound } from '../utils/soundPlayer.ts'
 
 export function loadLobby(){

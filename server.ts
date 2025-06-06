@@ -51,6 +51,7 @@ app.post('/api/match/:matchId', async (req, res) => {
 //reset game (maybe should rename route api/game/.../reset)
 app.post('/api/match/:matchId/reset/', async (req, res) => {
     const match = await api.resetGame(req.params.matchId);
+    io.to(match.matchId).emit('matchUpdated', match)
     res.json(match);
 });
 
