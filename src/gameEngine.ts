@@ -19,15 +19,15 @@ export type MoveCoords = {
     colIndex: number;
 };
 
-export function InitMatchState(): MatchState {
+export function initMatchState(): MatchState {
     return {
-        game: InitGameState(),
+        game: initGameState(),
         xScore: 0,
         oScore: 0,
         matchId: crypto.randomUUID(),
     };
 }
-export function InitGameState(): GameState {
+export function initGameState(): GameState {
     return {
         Board: [
             [null, null, null],

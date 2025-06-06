@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import type { MatchAPI } from "../api.ts";
-import { InitGameState, InitMatchState, type MatchState, type MoveCoords, move } from "../gameEngine.ts";
+import { initGameState, initMatchState, type MatchState, type MoveCoords, move } from "../gameEngine.ts";
 import { matchesTable } from "./schema.ts";
 import { eq } from "drizzle-orm";
 
@@ -19,7 +19,7 @@ export class DbMatchApi implements MatchAPI {
 
         const newMatch = {
             ...match,
-            game: InitGameState(),
+            game: initGameState(),
         };
 
         await db.update(matchesTable)
@@ -34,7 +34,7 @@ export class DbMatchApi implements MatchAPI {
     }
 
     async createMatch(): Promise<MatchState> {
-        const match = InitMatchState();
+        const match = initMatchState();
 
         await db.insert(matchesTable)
             .values(match); 
