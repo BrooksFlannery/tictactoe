@@ -23,5 +23,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "public/sounds", "utils/soundPlayer.ts"]
+  "include": ["src", "public/sounds", "src/utils/soundPlayer.ts"]
 }
