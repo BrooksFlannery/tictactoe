@@ -21,7 +21,6 @@ export function MatchView() {
 
   useEffect(() => {
     socket.on('matchUpdated', (updatedMatch) => {
-      console.log('Match updated:', updatedMatch);
       setShake(true);
       setMatchState(updatedMatch);
     });
@@ -30,7 +29,6 @@ export function MatchView() {
   useEffect(() => {
     if (!match.matchId) return;
     socket.emit('joinMatch', match);
-    console.log('joining match :', match.matchId);
 
     return () => {
       socket.off('connect');

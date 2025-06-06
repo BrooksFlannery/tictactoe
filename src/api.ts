@@ -6,6 +6,7 @@ export interface MatchAPI {
     getMatch(matchId: string): Promise<MatchState>;
     resetGame(matchId: string): Promise<MatchState>;
     getMatches(): Promise<MatchState[]>;
+    renameMatch(matchId: string, newName: string): Promise<MatchState> 
 }
 
 function findMatch(matchId: string, matches: Map<string, MatchState>): MatchState {
@@ -28,6 +29,11 @@ export class MemoryMatchAPI implements MatchAPI {
         const match = initMatchState();
         this.matches.set(match.matchId, match);
         return match;
+    }
+    async renameMatch(matchId: string, newName: string): Promise<MatchState> {
+        const matchState = findMatch(matchId, this.matches);
+        const newMatchState = {...matchState, matchName: newName};
+        return newMatchState;
     }
     
     async getMatch(matchId: string): Promise<MatchState> {
@@ -61,6 +67,16 @@ export class ClientMatchAPI implements MatchAPI {
         const response = await fetch("/api/match/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+        });
+        const match = await response.json();
+        return match;
+    }
+
+    async renameMatch(matchId: string, newName: string): Promise<MatchState> {
+        const response = await fetch(`/api/match/:${matchId}/rename/` , {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newName)
         });
         const match = await response.json();
         return match;

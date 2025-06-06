@@ -55,5 +55,9 @@ app.post('/api/match/:matchId/reset/', async (req, res) => {
     res.json(match);
 });
 
+app.post('/api/match/:matchId/rename/', async (req,res) => {
+    const match = await api.renameMatch(req.params.matchId, req.body)
+})
+
 const PORT = 3000;
 httpServer.listen(3000, () => console.log(`Server is listening on http://localhost:${PORT}`))
