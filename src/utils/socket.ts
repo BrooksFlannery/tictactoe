@@ -1,2 +1,6 @@
 import { io } from "socket.io-client";
-export const socket = io("http://localhost:3000");
+
+
+const URL = 'https://tictactoe-ux6o.onrender.com'//lazy and bad
+
+export const socket = io(`URL`);
