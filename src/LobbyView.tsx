@@ -1,6 +1,7 @@
 import { ClientMatchAPI } from "./api"
 import { useLoaderData, useNavigate } from "react-router";
 import type { MatchState } from "./gameEngine";
+import { playRandomSound } from '../utils/soundPlayer.ts'
 
 export function loadLobby(){
     const api = new ClientMatchAPI
@@ -10,9 +11,7 @@ export function loadLobby(){
 function MatchDisplay(match:MatchState){
     const navigate = useNavigate();
     const handleClick = () => {
-        const sound = new Audio('../sounds/shake1.mp3');
-        sound.playbackRate = 0.8 + (Math.random() - 0.1);
-        sound.play();
+        playRandomSound.interaction();
         navigate(`/matchView/${match.matchId}`);
     }
 
