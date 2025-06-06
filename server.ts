@@ -2,19 +2,27 @@ import 'dotenv/config';
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { DbMatchApi } from './src/db/db.ts'
+import cors from 'cors';
+import { DbMatchApi } from './src/db/db.ts';
+
+const allowedOrigins = ['http://localhost:5173', 'https://tictactoe-ux6o.onrender.com'];
 
 const app = express();
 app.use(express.json());
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
 const api = new DbMatchApi();
 
-const httpServer = createServer(app)
+const httpServer = createServer(app);
 const io = new Server(httpServer, {
-    cors: {
-        origin: "http://localhost:5173",
-        methods: ["GET","POST"]
-    }
-})
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST']
+  }
+});
 
 io.on("connection", (socket)=>{
     socket.on("joinMatch", (match) => {
