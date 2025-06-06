@@ -54,4 +54,5 @@ app.post('/api/match/:matchId/reset/', async (req, res) => {
     res.json(match);
 });
 
-httpServer.listen(3000, () => console.log("Server is listening on port 3000..."));
+const PORT = 3000;
+httpServer.listen(3000, () => console.log(`Server is listening on http://localhost:${PORT}`))

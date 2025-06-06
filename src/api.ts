@@ -1,4 +1,4 @@
-import { InitMatchState, InitGameState, move, type MatchState, type MoveCoords } from './gameEngine.ts';
+import { initMatchState, initGameState, move, type MatchState, type MoveCoords } from './gameEngine.ts';
 
 export interface MatchAPI {
     makeMove(matchId: string, moveCoords: MoveCoords): Promise<MatchState>;
@@ -25,7 +25,7 @@ export class MemoryMatchAPI implements MatchAPI {
     }
 
     async createMatch(): Promise<MatchState> {
-        const match = InitMatchState();
+        const match = initMatchState();
         this.matches.set(match.matchId, match);
         return match;
     }
@@ -41,7 +41,7 @@ export class MemoryMatchAPI implements MatchAPI {
 
     async resetGame(matchId: string): Promise<MatchState> {
         const matchState = findMatch(matchId, this.matches);
-        matchState.game = InitGameState();
+        matchState.game = initGameState();
         return matchState;
     }
 }

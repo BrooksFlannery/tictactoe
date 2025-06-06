@@ -3,6 +3,7 @@ import type { MatchState, MoveCoords } from './gameEngine.ts';
 import { ClientMatchAPI } from './api.ts';
 import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
 import { socket } from './socket.ts'
+import { playRandomSound } from '../utils/soundPlayer.ts';
 
 export async function loadMatch({params}:LoaderFunctionArgs):Promise<MatchState>{
   const matchId  = params.matchId as string;
@@ -29,19 +30,20 @@ export function MatchView(){
     if(!match.matchId) return;
     socket.emit('joinMatch', match);
     console.log('joining match :',match.matchId)
+
+    return () => {
+    socket.off('connect');
+    socket.off('matchUpdated');
+    };
   },[match.matchId])
 
   useEffect(() => {
     if (!matchState || !matchState.game) return;
 
     async function handleWin(endState: "x" | "o" | "tie", currentMatchId: string) {
-      const randomSound =
         endState === "tie"
-          ? failSounds[Math.floor(Math.random() * failSounds.length)]
-          : successSounds[Math.floor(Math.random() * successSounds.length)];
-      const sound = new Audio(randomSound);
-      sound.playbackRate = 0.8 + (Math.random() - 0.1);
-      sound.play();
+          ? playRandomSound.failure()
+          : playRandomSound.success();
 
       setWinMessage(
         endState === "tie"
@@ -76,19 +78,6 @@ export function MatchView(){
     return 'loading...';
   }
 
-  const successSounds = [
-    '../sounds/success/1.mp3',
-    '../sounds/success/2.mp3',
-    '../sounds/success/3.mp3',
-    '../sounds/success/4.mp3',
-    '../sounds/success/5.mp3',
-  ];
-  const failSounds = [
-    '../sounds/failure/1.mp3',
-    '../sounds/failure/2.mp3',
-    '../sounds/failure/3.mp3',
-  ];
-
   async function handleMove(matchId: string, coords: MoveCoords) {
     const match = await api.makeMove(matchId, coords);
     setMatchState(match);
@@ -97,9 +86,7 @@ export function MatchView(){
   function handleClick(cellIndex: number, rowIndex: number) {
     if (!matchState) return;
     setShake(true);
-    const sound = new Audio('../sounds/shake1.mp3');
-    sound.playbackRate = 0.8 + (Math.random() - 0.1);
-    sound.play();
+    playRandomSound.interaction();
     const coords: MoveCoords = {
       rowIndex,
       colIndex: cellIndex,
