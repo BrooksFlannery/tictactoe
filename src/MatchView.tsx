@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import type { MatchState, MoveCoords } from './gameEngine.ts';
 import { ClientMatchAPI } from './api.ts';
 import { useLoaderData, type LoaderFunctionArgs } from 'react-router';
+import { socket } from './socket.ts'
 
 export async function loadMatch({params}:LoaderFunctionArgs):Promise<MatchState>{
   const matchId  = params.matchId as string;
@@ -16,6 +17,19 @@ export function MatchView(){
   const [matchState, setMatchState] = useState<MatchState>(match);
   const [winMessage, setWinMessage] = useState('');
   const [shake, setShake] = useState(false);
+
+  useEffect(()=>{
+    socket.on('matchUpdated', (updatedMatch) => {
+      console.log('Match updated:', updatedMatch);
+      setMatchState(updatedMatch)
+    })
+  },[])
+
+  useEffect(() => {
+    if(!match.matchId) return;
+    socket.emit('joinMatch', match);
+    console.log('joining match :',match.matchId)
+  },[match.matchId])
 
   useEffect(() => {
     if (!matchState || !matchState.game) return;
