@@ -13,6 +13,7 @@ export type MatchState = {
     xScore: number;
     oScore: number;
     matchId: string;
+    matchName: string;
 };
 export type MoveCoords = {
     rowIndex: number;
@@ -20,11 +21,13 @@ export type MoveCoords = {
 };
 
 export function initMatchState(): MatchState {
+    const str: string = crypto.randomUUID();
     return {
         game: initGameState(),
         xScore: 0,
         oScore: 0,
-        matchId: crypto.randomUUID(),
+        matchId: str,
+        matchName: str
     };
 }
 export function initGameState(): GameState {

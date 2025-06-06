@@ -10,13 +10,13 @@ export function loadLobby(){
 
 function MatchDisplay(match:MatchState){
     const navigate = useNavigate();
-    const handleClick = () => {
+    const handleMatchClick = () => {
         playRandomSound.interaction();
         navigate(`/matchView/${match.matchId}`);
     }
 
     return(
-        <div className="lobby-match" key={match.matchId} onClick={handleClick}>
+        <div className="lobby-match" key={match.matchId} onClick={handleMatchClick}>
             {match.matchId}
         </div>
     )
@@ -24,9 +24,24 @@ function MatchDisplay(match:MatchState){
 
 export function LobbyView(){
     const matches: MatchState[] = useLoaderData();
+    const navigate = useNavigate();
+
+    const handleCreateClick = async() => {
+        const api = new ClientMatchAPI
+        const match = await api.createMatch();
+        console.log('')
+        playRandomSound.interaction();
+        navigate(`/matchView/${match.matchId}`);
+    }
+
     return(
-        <div className="lobby-match-container">
-            {matches.map((match) => MatchDisplay(match))}
-        </div>
+        <>
+            <button onClick={handleCreateClick}>
+                Create Match
+            </button>
+            <div className="lobby-match-container">
+                {matches.map((match) => MatchDisplay(match))}
+            </div>
+        </>
     )
 }

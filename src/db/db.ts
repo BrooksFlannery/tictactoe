@@ -10,6 +10,23 @@ if (!process.env.DATABASE_URL) {
 export const db = drizzle(process.env.DATABASE_URL)
 
 export class DbMatchApi implements MatchAPI {
+    async renameMatch(matchId: string, newName: string): Promise<MatchState> {
+        
+        const [match] = await db
+            .select()
+            .from(matchesTable)
+            .where(eq(matchesTable.matchId, matchId))
+        if(!match) throw new Error("Game not found")
+
+        const newMatch = { ...match, matchName:newName }
+
+        await db.update(matchesTable)
+            .set({ matchName: newMatch.matchName })
+            .where(eq(matchesTable.matchId, matchId))
+
+            return newMatch as MatchState;
+    }
+
     async resetGame(matchId: string): Promise<MatchState> {
         const [match] = await db
             .select()
