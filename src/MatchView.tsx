@@ -29,6 +29,11 @@ export function MatchView(){
     if(!match.matchId) return;
     socket.emit('joinMatch', match);
     console.log('joining match :',match.matchId)
+
+    return () => {
+    socket.off('connect');
+    socket.off('matchUpdated');
+    };
   },[match.matchId])
 
   useEffect(() => {
