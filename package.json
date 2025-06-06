@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "vite": "vite",
-    "serv": "nodemon --watch server.ts --exec ts-node server.ts",
+    "serv": "bun server.ts",
     "build": "tsc -b && vite build",
+    "docker:build": "docker build -t tictactoe .",
+    "docker:run": "docker run -p 8000:3000 tictactoe",
     "lint": "eslint .",
     "preview": "vite preview"
   },
