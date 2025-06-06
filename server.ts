@@ -1,11 +1,27 @@
-import 'dotenv/config'; 
+import 'dotenv/config';
 import express from "express";
+import { createServer } from "http";
+import { Server } from "socket.io";
 import { DbMatchApi } from './src/db/db.ts'
 
 const app = express();
 app.use(express.json());
 const api = new DbMatchApi();
 
+const httpServer = createServer(app)
+const io = new Server(httpServer, {
+    cors: {
+        origin: "http://localhost:5173",
+        methods: ["GET","POST"]
+    }
+})
+
+io.on("connection", (socket)=>{
+    socket.on("joinMatch", (match) => {
+        socket.join(match.matchId);
+        console.log(`${socket.id} joined match ${match.matchId}`);
+    })
+})
 
 // get match
 app.get('/api/match/:matchId/', async (req, res) => {
@@ -28,6 +44,7 @@ app.post('/api/match/', async (req, res) => {
 // make move (maybe a better route would be /api/game/.....)
 app.post('/api/match/:matchId', async (req, res) => {
     const match = await api.makeMove(req.params.matchId, req.body);
+    io.to(match.matchId).emit('matchUpdated', match)
     res.json(match);
 });
 
@@ -37,4 +54,4 @@ app.post('/api/match/:matchId/reset/', async (req, res) => {
     res.json(match);
 });
 
-app.listen(3000, () => console.log("Server is listening on port 3000..."));
+httpServer.listen(3000, () => console.log("Server is listening on port 3000..."));
