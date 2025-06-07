@@ -1,7 +1,7 @@
 import { initMatchState, initGameState, move, type MatchState, type MoveCoords } from './gameEngine.ts';
 
 
-const URL = 'https://tictactoe-ux6o.onrender.com'
+// const URL = 'https://tictactoe-ux6o.onrender.com'
 
 
 export interface MatchAPI {
@@ -58,7 +58,7 @@ export class MemoryMatchAPI implements MatchAPI {
 
 export class ClientMatchAPI implements MatchAPI {
     async makeMove(matchId: string, moveCoords: MoveCoords): Promise<MatchState> {
-        const response = await fetch(`${URL}/api/match/${matchId}/`, {
+        const response = await fetch(`/api/match/${matchId}/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(moveCoords),
@@ -68,7 +68,7 @@ export class ClientMatchAPI implements MatchAPI {
     }
 
     async createMatch(): Promise<MatchState> {
-        const response = await fetch(`${URL}/api/match/`, {
+        const response = await fetch(`/api/match/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
         });
@@ -78,7 +78,7 @@ export class ClientMatchAPI implements MatchAPI {
 
     async renameMatch(matchId: string, newName: string): Promise<MatchState> {
         console.log("new name: ", newName, " matchId: ", matchId)
-        const response = await fetch(`${URL}/api/match/${matchId}/rename/` , {
+        const response = await fetch(`/api/match/${matchId}/rename/` , {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({newName})
@@ -88,7 +88,7 @@ export class ClientMatchAPI implements MatchAPI {
     }
 
     async getMatch(matchId: string): Promise<MatchState> {
-        const response = await fetch(`${URL}/api/match/${matchId}/`, {
+        const response = await fetch(`/api/match/${matchId}/`, {
             method: "GET",
         });
         const match = await response.json();
@@ -96,7 +96,7 @@ export class ClientMatchAPI implements MatchAPI {
     }
 
     async getMatches(): Promise<MatchState[]> {
-        const response = await fetch(`${URL}/api/matches/`, {
+        const response = await fetch(`/api/matches/`, {
             method : "GET",
         });
         const matches = await response.json();
@@ -104,7 +104,7 @@ export class ClientMatchAPI implements MatchAPI {
     }
 
     async resetGame(matchId: string): Promise<MatchState> {
-        const response = await fetch(`${URL}/api/match/${matchId}/reset/`, {
+        const response = await fetch(`/api/match/${matchId}/reset/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
         });

@@ -1,3 +1,7 @@
+export type User = {
+    userId : string;
+    userName: string;
+}
 export type Player = "x" | "o";
 export type Cell = Player | null;
 export type Row = Cell[];
@@ -19,6 +23,14 @@ export type MoveCoords = {
     rowIndex: number;
     colIndex: number;
 };
+
+export function initUser(name : string): User {
+    const str: string = crypto.randomUUID();
+    return{
+        userName : name,
+        userId : str
+    }
+}
 
 export function initMatchState(): MatchState {
     const str: string = crypto.randomUUID();
