@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router";
+// import { useEffect, useState } from "react";
+import { Outlet } from "react-router";
 
 
 
 function App() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const [user,setUser] = useState('')
-  const [match,setMatch] =useState('')
-  useEffect(() => {
-    if(!user) navigate('/');
-    if(!match) navigate('/lobby')
-  }, [user])
+  // const [user,setUser] = useState('')
+  // const [match,setMatch] =useState('')
+  // useEffect(() => {
+  //   if(!user) navigate('/');
+  //   if(!match) navigate('/lobby')
+  // }, [user])
 
 
   return(
