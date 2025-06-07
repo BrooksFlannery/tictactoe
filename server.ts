@@ -9,17 +9,14 @@ const allowedOrigins = ['http://localhost:5173', 'https://tictactoe-ux6o.onrende
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
+app.use(cors());
 
 const api = new DbMatchApi();
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: allowedOrigins,
+    origin: "*",
     methods: ['GET', 'POST']
   }
 });
