@@ -4,8 +4,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from 'cors';
 import { DbMatchApi } from './src/db/db.ts';
-
-const allowedOrigins = ['http://localhost:5173', 'https://tictactoe-ux6o.onrender.com'];
+import { initUser } from './src/gameEngine.ts';
 
 const app = express();
 app.use(express.json());
@@ -26,6 +25,11 @@ io.on("connection", (socket)=>{
         socket.join(match.matchId);
         console.log(`${socket.id} joined match ${match.matchId}`);
     })
+})
+
+app.post('/api/login/', async (req, res) => {
+    const user = initUser(req.body.name);
+    res.json(user);
 })
 
 // get match

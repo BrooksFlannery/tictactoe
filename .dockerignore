@@ -6,3 +6,5 @@ build
 .gitignore
 *.log
 .DS_Store
+public/sounds
+public
