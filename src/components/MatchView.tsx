@@ -22,6 +22,7 @@ export function MatchView() {
   const [shake, setShake] = useState(false);
 
   useEffect(() => {
+      socket.connect(); 
     socket.on('matchUpdated', (updatedMatch) => {
       setShake(true);
       setMatchState(updatedMatch);
