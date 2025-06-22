@@ -1,7 +1,7 @@
 import { initMatchState, initGameState, move, type MatchState, type MoveCoords } from './gameEngine.ts';
 
 
-const URL = 'https://tictactoe-ux6o.onrender.com'
+const URL = 'https://tictactoe-beige-nu.vercel.app/'
 
 
 export interface MatchAPI {
@@ -10,7 +10,7 @@ export interface MatchAPI {
     getMatch(matchId: string): Promise<MatchState>;
     resetGame(matchId: string): Promise<MatchState>;
     getMatches(): Promise<MatchState[]>;
-    renameMatch(matchId: string, newName: string): Promise<MatchState> 
+    renameMatch(matchId: string, newName: string): Promise<MatchState>
 }
 
 function findMatch(matchId: string, matches: Map<string, MatchState>): MatchState {
@@ -36,10 +36,10 @@ export class MemoryMatchAPI implements MatchAPI {
     }
     async renameMatch(matchId: string, newName: string): Promise<MatchState> {
         const matchState = findMatch(matchId, this.matches);
-        const newMatchState = {...matchState, matchName: newName};
+        const newMatchState = { ...matchState, matchName: newName };
         return newMatchState;
     }
-    
+
     async getMatch(matchId: string): Promise<MatchState> {
         return findMatch(matchId, this.matches);
     }
@@ -78,10 +78,10 @@ export class ClientMatchAPI implements MatchAPI {
 
     async renameMatch(matchId: string, newName: string): Promise<MatchState> {
         console.log("new name: ", newName, " matchId: ", matchId)
-        const response = await fetch(`${URL}/api/match/${matchId}/rename/` , {
+        const response = await fetch(`${URL}/api/match/${matchId}/rename/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({newName})
+            body: JSON.stringify({ newName })
         });
         const match = await response.json();
         return match;
@@ -97,7 +97,7 @@ export class ClientMatchAPI implements MatchAPI {
 
     async getMatches(): Promise<MatchState[]> {
         const response = await fetch(`${URL}/api/matches/`, {
-            method : "GET",
+            method: "GET",
         });
         const matches = await response.json();
         return matches
